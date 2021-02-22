@@ -31,8 +31,10 @@ public class Cart {
         for(Order_Session orderSession: orderSessions){
             if(orderSession.getProduct().getId().equals(product.getId())){
                 orderSessions.remove(orderSession);
-                return;
+                break;
             }
         }
     }
+
+
 }

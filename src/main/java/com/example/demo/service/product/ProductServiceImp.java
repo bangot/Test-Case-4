@@ -13,7 +13,7 @@ public class ProductServiceImp implements ProductService {
     private ProductRepository productRepository;
 
     @Override
-    public List<Product> findAll() {
+    public Iterable<Product> findAll() {
         return productRepository.findAll();
     }
 
@@ -28,7 +28,7 @@ public class ProductServiceImp implements ProductService {
     }
 
     @Override
-    public void delete(long id) {
+    public void delete(Long id) {
         productRepository.deleteById(id);
     }
 }

@@ -15,13 +15,13 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Long quantity;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String imgSrc;
 
     @Transient
@@ -43,10 +43,10 @@ public class Product {
         this.image = image;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "cate_id", referencedColumnName = "id", nullable = false)
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "cate_id", referencedColumnName = "id", nullable = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Category category;
+    private Category category = new Category();
 
     public Product() {
     }

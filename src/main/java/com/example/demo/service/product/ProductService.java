@@ -5,8 +5,8 @@ import com.example.demo.model.Product;
 import java.util.List;
 
 public interface ProductService {
-    public List<Product> findAll();
+    Iterable<Product> findAll();
     Product finById(long id);
     void save(Product product);
-    void delete(long id);
+    void delete(Long id);
 }

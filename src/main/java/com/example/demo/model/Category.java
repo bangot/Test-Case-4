@@ -16,7 +16,7 @@ public class Category {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE, CascadeType.PERSIST} )
+    @OneToMany(mappedBy = "category", cascade = {CascadeType.REMOVE, CascadeType.PERSIST} )
     private Set<Product> products = new HashSet<>();
 
     public Long getId() {
@@ -38,6 +38,9 @@ public class Category {
     public Set<Product> getProducts() {
         return products;
     }
+
+
+
 
     public void setProducts(Set<Product> products) {
         this.products = products;
