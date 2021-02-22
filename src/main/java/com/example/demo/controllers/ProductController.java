@@ -25,8 +25,6 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @Value("${upload.path}")
-    private String fileUpload;
 
     @GetMapping("/list")
     public ModelAndView showAllProduct() {
@@ -44,15 +42,6 @@ public class ProductController {
     }
 
 
-    @GetMapping("/delete/{id}")
-    public ModelAndView deleteProduct(@PathVariable Long id) {
-        Product product = productService.finById(id);
-        productService.delete(product.getId());
-        Iterable<Product> products = productService.findAll();
-        ModelAndView modelAndView = new ModelAndView("bang");
-        modelAndView.addObject("products", products);
-        return modelAndView;
-    }
 
 
     @GetMapping("/findOne")
@@ -61,39 +50,10 @@ public class ProductController {
         return productService.finById(product.getId());
     }
 
-    @GetMapping("/bang")
-    public ModelAndView showCreateProduct() {
-        ModelAndView modelAndView = new ModelAndView("/bang");
-        modelAndView.addObject("products", productService.findAll());
-        return modelAndView;
-    }
 
 
-    @GetMapping("/create")
-    public ModelAndView newProduct() {
-        ModelAndView modelAndView = new ModelAndView("/create");
-        modelAndView.addObject("products", new Product());
-        return modelAndView;
-    }
 
 
-    @PostMapping("/create_product")
-    public ModelAndView saveProduct(@ModelAttribute("products") Product product) {
-        MultipartFile multipartFile = product.getImage();
-        String fileName = multipartFile.getOriginalFilename();
-
-        try {
-            FileCopyUtils.copy(product.getImage().getBytes(), new File(fileUpload + fileName));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        product.setImgSrc(fileName);
-        productService.save(product);
-        ModelAndView modelAndView = new ModelAndView("/create");
-        modelAndView.addObject("products", new Product());
-        modelAndView.addObject("message", "New Product Created Successfully");
-        return modelAndView;
-    }
 
 
 }

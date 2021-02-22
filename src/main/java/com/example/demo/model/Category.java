@@ -13,7 +13,7 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String name;
 
     @OneToMany(mappedBy = "category", cascade = {CascadeType.REMOVE, CascadeType.PERSIST} )

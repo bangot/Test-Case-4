@@ -1,4 +1,22 @@
 package com.example.demo.controllers;
+import com.example.demo.model.Cart;
+import com.example.demo.model.Product;
+import com.example.demo.repository.ProductRepository;
+import com.example.demo.service.product.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
 
 import com.example.demo.model.Product;
 import com.example.demo.model.Role;
@@ -19,6 +37,9 @@ import java.util.Set;
 
 @Controller
 public class SecurityController {
+
+    @Value("${upload.path}")
+    private String fileUpload;
     @Autowired
     IUserService userService;
 
@@ -94,12 +115,14 @@ public class SecurityController {
         ModelAndView model = new ModelAndView("bang", "products", products);
         return model;
     }
+//    @GetMapping("/bang")
+//    public ModelAndView showCreateProduct() {
+//        ModelAndView modelAndView = new ModelAndView("/bang");
+//        modelAndView.addObject("products", productService.findAll());
+//        return modelAndView;
+//    }
 
 
-    @GetMapping("/create")
-    public String create() {
-        return "create";
-    }
 
     @GetMapping("/delete")
     public String delete(@RequestParam Long id) {
@@ -109,5 +132,45 @@ public class SecurityController {
         productService.delete(id);
         return "redirect:/bang";
     }
+
+    @GetMapping("/delete/{id}")
+    public ModelAndView deleteProduct(@PathVariable Long id) {
+        Product product = productService.finById(id);
+        productService.delete(product.getId());
+        Iterable<Product> products = productService.findAll();
+        ModelAndView modelAndView = new ModelAndView("bang");
+        modelAndView.addObject("products", products);
+        return modelAndView;
+    }
+
+
+
+
+    @GetMapping("/create")
+    public ModelAndView getCreate() {
+        ModelAndView modelAndView = new ModelAndView("create");
+        modelAndView.addObject("products",new Product());
+        return modelAndView;
+    }
+
+    @PostMapping("/create")
+    public ModelAndView postCreate(@ModelAttribute("products") Product product) {
+        MultipartFile multipartFile = product.getImage();
+        String fileName = multipartFile.getOriginalFilename();
+
+        try {
+            FileCopyUtils.copy(product.getImage().getBytes(), new File(fileUpload + fileName));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        product.setImgSrc(fileName);
+        productService.save(product);
+        ModelAndView modelAndView = new ModelAndView("/create");
+        modelAndView.addObject("products", new Product());
+        modelAndView.addObject("message", "New Product Created Successfully");
+        return modelAndView;
+    }
+
+
 
 }

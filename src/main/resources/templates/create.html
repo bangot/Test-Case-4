@@ -11,25 +11,26 @@
     <p th:text="${message}"></p>
 </th:block>
 
-<form th:action="@{/products/create_product}" method="post" th:object="${products}" enctype="multipart/form-data">
-    <table>
-        <tr>
-            <td>Name</td>
-            <td><input type="text" th:field="*{name}" required></td>
-        </tr>
-        <tr>
-            <td>quantity</td>
-            <td><input type="text" th:field="*{quantity}" required></td>
-        </tr>
-<!--        <tr>-->
-<!--            <td>Image</td>-->
-<!--            <td><input type="hidden" required th:field="*{image}"></td>-->
-<!--        </tr>-->
-        <tr>
-            <td></td>
-            <td><input type="submit" value="create"></td>
-        </tr>
-    </table>
+<form th:action="@{/create}" method="post" th:object="${products}"  enctype="multipart/form-data">
+
+        <table>
+            <tr>
+                <td>Name</td>
+                <td><input class="form-control" name="name" type="text" th:field="*{name}" required></td>
+            </tr>
+            <tr>
+                <td>quantity</td>
+                <td><input class="form-control" name="quantity" type="text" th:field="*{quantity}" required></td>
+            </tr>
+            <tr>
+                <td>image</td>
+                <td><input class="form-control" name="image" type="file" th:field="*{image}" required></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="submit" value="create"></td>
+            </tr>
+        </table>
 </form>
 </body>
 </html>
